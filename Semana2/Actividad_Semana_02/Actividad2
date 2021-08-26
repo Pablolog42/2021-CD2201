@@ -1,0 +1,40 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+lats = np.loadtxt('/Users/pablo/Desktop/Programacion/Python/2021-CD2201/Semana2/Actividad_Semana_02/data/etopo20lats.txt') 
+lons = np.loadtxt('/Users/pablo/Desktop/Programacion/Python/2021-CD2201/Semana2/Actividad_Semana_02/data/etopo20lons.txt')
+topo_grid = np.loadtxt('/Users/pablo/Desktop/Programacion/Python/2021-CD2201/Semana2/Actividad_Semana_02/data/etopo20data.txt')
+
+
+topo_max = np.max(topo_grid)
+topo_min = np.min(topo_grid)
+
+
+topo_mean = np.mean(topo_grid)
+topo_sigma = np.std(topo_grid)
+#largo de una fila por largo de una columna
+topo_n = len(topo_grid)*len(topo_grid[0])
+
+topo_n = len(lats)*len(lons)
+Planet_Norm_topo = np.random.normal(topo_mean,topo_sigma,topo_n)
+
+## Generate the sort Planet Norm topo here
+Planet_Norm_topo_sort = -np.sort(-Planet_Norm_topo)
+# Da un array dentro de otro, tomamos el array interior
+topo_grid_sort = -np.sort(-topo_grid.reshape(1,583740))[0]
+
+xaxis =  np.arange(0,len(lons)*len(lats))/(len(lons)*len(lats))*100
+
+### Make a plot with Earth data and the synthetic Planet Norm data here
+plt.legend(['Planeta Normal', 'Tierra'])
+plt.xlabel('Porcentaje')
+plt.ylabel('Elevación (m)')
+plt.plot(xaxis,xaxis*0,linestyle='dashed',label='Nivel del Mar')
+
+plt.plot(xaxis,topo_grid_sort,label='Curva Hipsométrica Tierra')
+plt.plot(xaxis,Planet_Norm_topo_sort,label='Curva Hipsométrica Planeta Normal')
+
+plt.xlim(0,30)
+plt.ylim(-1000,1000)
+
+plt.show()
